@@ -78,7 +78,7 @@ export default function LoginPage() {
                                     <FormItem>
                                         <FormLabel>Email</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Email" {...field} />
+                                            <Input placeholder="example@gmail.com" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -101,11 +101,14 @@ export default function LoginPage() {
                                     </FormItem>
                                 )}
                             />
-                            <Button type="submit" disabled={isLoading}>
+                            <Button type="submit" className="w-full" disabled={isLoading}>
                                 {isLoading ? "Logging in..." : "Login"}
                             </Button>
                         </form>
                     </Form>
+                    <div className="mt-4 text-center text-sm text-gray-500">
+                        Don't have an account? <Link href="/register" className="text-blue-500 hover:text-blue-600">Sign up</Link>
+                    </div>
                 </CardContent>
             </Card>
         </div>
