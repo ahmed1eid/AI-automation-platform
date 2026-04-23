@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import connectToDatabase from "@/lib/db";
@@ -37,7 +38,21 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ message: "User created successfully." }, { status: 201 });
-  } catch {
+  } catch (error) {
+    console.error("Register API error:", error);
+    if (error instanceof mongoose.Error || error instanceof Error) {
+      const message = error.message || "";
+      if (
+        message.includes("MONGODB_URI") ||
+        message.includes("ECONNREFUSED") ||
+        message.includes("ServerSelectionError")
+      ) {
+        return NextResponse.json(
+          { error: "Database is not configured or not running. Set MONGODB_URI and start MongoDB." },
+          { status: 503 }
+        );
+      }
+    }
     return NextResponse.json({ error: "Failed to register user." }, { status: 500 });
   }
 }
