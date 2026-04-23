@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Artificial Intelligence Platform
 
-## Getting Started
+A modern AI workflow platform built with Next.js, TypeScript, NextAuth, and MongoDB.
 
-First, run the development server:
+## Tech Stack
+
+- Next.js (App Router)
+- TypeScript
+- NextAuth (Credentials provider)
+- MongoDB + Mongoose
+- Tailwind CSS
+- React Hook Form + Zod
+
+## Features
+
+- User registration and login
+- Protected dashboard routes
+- Session-based auth flow
+- Theme toggle (light/dark/system)
+- API route for account creation
+
+## Prerequisites
+
+- Node.js 18+ (recommended: latest LTS)
+- npm
+- A running MongoDB instance (local or Atlas)
+
+## Environment Variables
+
+Create a `.env.local` file in the project root:
+
+```env
+AUTH_SECRET=replace-with-a-long-random-secret
+MONGODB_URI=mongodb://127.0.0.1:27017/artificial_intelligence_platform
+```
+
+Notes:
+- `AUTH_SECRET` is required by NextAuth.
+- `MONGODB_URI` must point to an available MongoDB server.
+
+## Installation
+
+```bash
+npm install
+```
+
+## Run Locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+## Useful Scripts
 
-To learn more about Next.js, take a look at the following resources:
+- `npm run dev` - start development server
+- `npm run lint` - run ESLint
+- `npm run build` - create production build
+- `npm run start` - start production server
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure (Key Paths)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `src/app/(auth)/login/page.tsx` - Login page
+- `src/app/(auth)/register/page.tsx` - Register page
+- `src/app/api/auth/[...nextauth]/route.ts` - NextAuth API handler
+- `src/app/api/register/route.ts` - Registration API endpoint
+- `src/app/dashboard/layout.tsx` - Dashboard layout
+- `src/models/auth.ts` - NextAuth main config
+- `src/models/auth.config.ts` - Shared auth callbacks/pages config
+- `src/models/User.ts` - User schema/model
+- `src/lib/db.ts` - MongoDB connection helper
 
-## Deploy on Vercel
+## Troubleshooting
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### `POST /api/register` returns `503`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This means database is unavailable.
+
+Check:
+- MongoDB is running
+- `MONGODB_URI` in `.env.local` is correct
+- App has been restarted after env changes
+
+### `MissingSecret` auth error
+
+Set `AUTH_SECRET` in `.env.local` and restart the server.
+
+## License
+
+Private project for internal development.
