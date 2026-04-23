@@ -19,7 +19,6 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
-import { tr } from "zod/locales";
 
 const formSchema = z.object({
     email: z.string().email("Please enter a valid email address."),
@@ -52,7 +51,7 @@ export default function LoginPage() {
                 toast.success("Logged in successfully!");
                 router.push("/dashboard");
             }
-        } catch (error) {
+        } catch {
             toast.error("An error occurred while logging in.");
         } finally {
             setIsLoading(false);
@@ -107,7 +106,7 @@ export default function LoginPage() {
                         </form>
                     </Form>
                     <div className="mt-4 text-center text-sm text-gray-500">
-                        Don't have an account? <Link href="/register" className="text-blue-500 hover:text-blue-600">Sign up</Link>
+                        Don&apos;t have an account? <Link href="/register" className="text-blue-500 hover:text-blue-600">Sign up</Link>
                     </div>
                 </CardContent>
             </Card>

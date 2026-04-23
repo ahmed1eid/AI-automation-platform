@@ -19,7 +19,6 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
-import { tr } from "zod/locales";
 
 const formSchema = z.object({
     name: z.string().min(3, "Name must be at least 3 characters long."),
@@ -43,6 +42,22 @@ export default function LoginPage() {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
         try {
+            const registerResponse = await fetch("/api/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: values.name,
+                    email: values.email,
+                    password: values.password,
+                }),
+            });
+
+            if (!registerResponse.ok) {
+                const errorData = (await registerResponse.json()) as { error?: string };
+                toast.error(errorData.error || "Failed to create account.");
+                return;
+            }
+
             const res = await signIn("credentials", {
                 email: values.email,
                 password: values.password,
@@ -54,7 +69,7 @@ export default function LoginPage() {
                 toast.success("Account created successfully!");
                 router.push("/dashboard");
             }
-        } catch (error) {
+        } catch {
             toast.error("An error occurred while creating account.");
         } finally {
             setIsLoading(false);

@@ -1,4 +1,4 @@
-import { Mongoose } from "mongoose";
+import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/your-db-name";
 
@@ -7,6 +7,40 @@ if (!MONGODB_URI) {
 }
 
 interface MongooseCache {
-    conn: typeof Mongoose | null;
-    Promise: Promise<typeof Mongoose> | null;
+    conn: typeof mongoose | null;
+    Promise: Promise<typeof mongoose> | null;
 }
+
+declare global {
+    var mongoose: MongooseCache;
+}
+
+let cached = global.mongoose
+
+if (!cached) {
+    cached = global.mongoose = { conn: null, Promise: null };
+}
+
+async function connectToDatabase() {
+    if (cached.conn) {
+        return cached.conn;
+    }
+
+    if (!cached.Promise) {
+        const apts = {
+            bufferCommands: false,
+        };
+        cached.Promise = mongoose.connect(MONGODB_URI!, apts).then((mongoose) => {
+            return mongoose;
+        });
+    }
+    try {
+        cached.conn = await cached.Promise;
+    } catch (error) {
+        cached.Promise = null;
+        throw error;
+    }
+    return cached.conn;
+}
+
+export default connectToDatabase;

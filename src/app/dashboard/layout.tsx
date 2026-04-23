@@ -5,7 +5,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { LayoutDashboard, Zap, FileText, CreditCard, Settings, LogOut, Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
-import { signOut } from "next-auth/react";
+import { auth, signOut } from "@/models/auth";
+import connectToDatabase from "@/lib/db";
+import User from "@/models/User";
+import ModeToggel from "@/components/mode-toggel";
 
 const navItems = [
     { label: "Dashboard", icon: LayoutDashboard,  href: "/dashboard"},
@@ -78,9 +81,9 @@ export default async function DashboardLayout({ children }: Readonly<{ children:
                         <SheetContent side="left" className="w-64 p-0">
                             <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                             <div className="flex h-16 items-center border-b px-6">
-                                <Link href={'/dashbord'} className="flex items-center gap-2 font-semibold ">
+                                <Link href={"/dashboard"} className="flex items-center gap-2 font-semibold ">
                                 <Zap className="h-5 w-5 text-primary " />
-                                <span>AutoFlow ai</span>
+                                <span>AutoFlow AI</span>
                                 </Link>
                             </div>
                             <nav className="space-y-1 px-3 py-4">
